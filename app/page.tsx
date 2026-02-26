@@ -1,13 +1,15 @@
 'use client'; // tells Next.js this is a client component and can use hooks like useState
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [prompt, setPrompt] = useState<string>(''); // user input for image generation
   // const [imageUrl, setImageUrl] = useState<string | null>(null); // generated image URL, replaced by images array to store multiple generated images
-  const [images, setImages] = useState<string[]>(() => {
+  const [images, setImages] = useState<string[]>([]); // array to store multiple generated image URLs
+
+  useEffect(() => {
     const stored = localStorage.getItem('images');
-    return stored ? JSON.parse(stored) : [];
-  }); // array of generated image URLs, initialized from localStorage
+    if (stored) setImages(JSON.parse(stored));
+  }, []); // on component mount, load any previously generated images from localStorage
   
   const [loading, setLoading] = useState<boolean>(false); // loading state to disable button and show feedback
   const [error, setError] = useState<string | null>(null); // error state to display any issues
