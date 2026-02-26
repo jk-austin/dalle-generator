@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 flex flex-col items-center justify-start pt-24 px-4">
       <h1 className="text-4xl font-light tracking-widest text-slate-300 mb-12 uppercase">
-        Image Generator
+        Depths Image Studio
       </h1>
       <form onSubmit={handleSubmit} className="w-full max-w-xl flex flex-col gap-4">
         <input
