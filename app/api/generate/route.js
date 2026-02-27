@@ -30,7 +30,7 @@ export async function POST(request) {
     } catch (error) {
         console.error('API route error:', error);
         if (error.code === 'content_policy_violation') {
-            return NextResponse.json({ error: 'Your prompt was rejected by OpenAI content policy. Please try a different prompt.' }, { status: 400 });
+            return NextResponse.json({ error: 'Your prompt was rejected by the OpenAI content policy. Please try a different prompt.' }, { status: 400 });
         }
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
