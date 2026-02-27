@@ -1,5 +1,6 @@
 'use client'; // tells Next.js this is a client component and can use hooks like useState
 import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase'; // import the Supabase client to interact with the database
 
 export default function Home() {
   const [prompt, setPrompt] = useState<string>(''); // user input for image generation
@@ -11,9 +12,24 @@ export default function Home() {
     if (stored) setImages(JSON.parse(stored));
   }, []); // on component mount, load any previously generated images from localStorage
   
+  async function fetchCount() {
+    const { data } = await supabase
+      .from('counter')
+      .select('count')
+      .single();
+    console.log('count data:', data);
+    console.log('count error:', error);
+    if (data) setCount(data.count);
+  }
+  
+  useEffect(() => {
+    fetchCount();
+  }, []); // on component mount, fetch the current count of generated images from Supabase to display usage stats
+
   const [loading, setLoading] = useState<boolean>(false); // loading state to disable button and show feedback
   const [error, setError] = useState<string | null>(null); // error state to display any issues
-
+  const [count, setCount] = useState<number>(0); // state to track the number of images generated, will be updated from Supabase
+  
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); // prevent page refresh on form submit
     setLoading(true); // set loading state to true while fetching, will change button display
@@ -35,15 +51,19 @@ export default function Home() {
         localStorage.setItem('images', JSON.stringify(updated));
         return updated;
       }); // add new image URL to the beginning of the images array and update localStorage
+      await fetchCount(); // after successfully generating an image, fetch the updated count from Supabase to reflect the new total in the UI
     }
     setLoading(false); // reset loading state after response is handled
   }
 
   return (
     <main className="min-h-screen bg-slate-950 flex flex-col items-center justify-start pt-24 px-4">
-      <h1 className="text-4xl font-light tracking-widest text-slate-300 mb-12 uppercase">
+      <h1 className="text-4xl font-light tracking-widest text-slate-300 uppercase">
         Depths Image Studio
       </h1>
+      <p className=" text-slate-500 text-sm tracking-widest mb-12">
+        {count} {count === 1 ? 'image generated' : 'images generated'} {/* display the count of generated images */}
+      </p>
     {/* form to handle user input and submission */}
     <form onSubmit={handleSubmit} className="w-full max-w-xl flex flex-col gap-4">
         <input
