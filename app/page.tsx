@@ -44,24 +44,25 @@ export default function Home() {
       <h1 className="text-4xl font-light tracking-widest text-slate-300 mb-12 uppercase">
         Depths Image Studio
       </h1>
-      <form onSubmit={handleSubmit} className="w-full max-w-xl flex flex-col gap-4">
+    {/* form to handle user input and submission */}
+    <form onSubmit={handleSubmit} className="w-full max-w-xl flex flex-col gap-4">
         <input
           type="text"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
+          value={prompt} // bind input value to prompt state
+          onChange={(e) => setPrompt(e.target.value)} // update prompt state on input change
           placeholder="A magnificent castle with dragons flying above..."
           className="bg-slate-800 text-slate-200 placeholder-slate-500 border border-slate-700 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-slate-400"
         />
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading} // disable button while loading to prevent multiple submissions
           className="bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm tracking-widest uppercase py-3 rounded-sm transition-colors disabled:opacity-50"
         >
-          {loading ? 'Generating...' : 'Generate'}
+          {loading ? 'Generating...' : 'Generate'} {/* change button text based on loading state */}
         </button>
       </form>
       {error && (
-        <p className="mt-6 text-red-400 text-sm">{error}</p>
+        <p className="mt-6 text-red-400 text-sm">{error}</p> /* display error message if there is an error */
       )}
       {images.length > 0 && (
         <div className="mt-12 mb-24 w-full max-w-xl flex flex-col gap-6">
@@ -69,7 +70,7 @@ export default function Home() {
             <img
               key={index}
               src={url}
-              alt={`Generated image ${index + 1}`}
+              alt={`Generated image ${index + 1}`} /* display generated image if available, with alt text for accessibility */
               className="w-full rounded-sm opacity-90"
             />
           ))}
